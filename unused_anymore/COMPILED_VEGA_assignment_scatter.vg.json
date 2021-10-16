@@ -1,0 +1,274 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "A scatterplot showing body mass and flipper lengths of penguins.",
+    "background": "white",
+    "padding": 5,
+    "width": 400,
+    "height": 200,
+    "title": {"text": "Price againts Rating Scores", "frame": "group"},
+    "style": "cell",
+    "data": [
+      {"name": "room_type_highlight_store"},
+      {
+        "name": "source_0",
+        "url": "https://raw.githubusercontent.com/ChiptenIsCool/FIT3179_ASSIGNMENT_2/main/data/dtaversion6336.csv",
+        "format": {"type": "csv", "delimiter": ","},
+        "transform": [
+          {
+            "type": "filter",
+            "expr": "room_using == null || datum.room_type == room_using"
+          },
+          {"type": "filter", "expr": "datum.review_scores_rating >20"},
+          {
+            "type": "filter",
+            "expr": "isValid(datum[\"review_scores_rating\"]) && isFinite(+datum[\"review_scores_rating\"]) && isValid(datum[\"price\"]) && isFinite(+datum[\"price\"])"
+          }
+        ]
+      }
+    ],
+    "signals": [
+      {
+        "name": "unit",
+        "value": {},
+        "on": [
+          {"events": "mousemove", "update": "isTuple(group()) ? group() : unit"}
+        ]
+      },
+      {
+        "name": "room_type_highlight_room_type_legend",
+        "value": null,
+        "on": [
+          {
+            "events": [
+              {
+                "source": "view",
+                "type": "click",
+                "markname": "room_type_legend_symbols"
+              },
+              {
+                "source": "view",
+                "type": "click",
+                "markname": "room_type_legend_labels"
+              },
+              {
+                "source": "view",
+                "type": "click",
+                "markname": "room_type_legend_entries"
+              }
+            ],
+            "update": "datum.value || item().items[0].items[0].datum.value",
+            "force": true
+          },
+          {
+            "events": [{"source": "view", "type": "click"}],
+            "update": "!event.item || !datum ? null : room_type_highlight_room_type_legend",
+            "force": true
+          }
+        ]
+      },
+      {
+        "name": "room_type_highlight",
+        "update": "vlSelectionResolve(\"room_type_highlight_store\", \"union\", true, true)"
+      },
+      {
+        "name": "room_using",
+        "bind": {
+          "input": "select",
+          "options": [null, "Entire home/apt", "Private room", "Shared room"],
+          "labels": [
+            "Show All",
+            "Entire Home or Apartment",
+            "Private room",
+            "Shared room"
+          ],
+          "name": "Room Type: "
+        }
+      },
+      {
+        "name": "room_type_highlight_tuple",
+        "update": "room_type_highlight_room_type_legend !== null ? {fields: room_type_highlight_tuple_fields, values: [room_type_highlight_room_type_legend]} : null"
+      },
+      {
+        "name": "room_type_highlight_tuple_fields",
+        "value": [{"type": "E", "field": "room_type"}]
+      },
+      {
+        "name": "room_type_highlight_toggle",
+        "value": false,
+        "on": [
+          {
+            "events": {"merge": [{"source": "view", "type": "click"}]},
+            "update": "event.shiftKey"
+          }
+        ]
+      },
+      {
+        "name": "room_type_highlight_modify",
+        "on": [
+          {
+            "events": {"signal": "room_type_highlight_tuple"},
+            "update": "modify(\"room_type_highlight_store\", room_type_highlight_toggle ? null : room_type_highlight_tuple, room_type_highlight_toggle ? null : true, room_type_highlight_toggle ? room_type_highlight_tuple : null)"
+          }
+        ]
+      }
+    ],
+    "marks": [
+      {
+        "name": "layer_0_marks",
+        "type": "symbol",
+        "style": ["point"],
+        "interactive": true,
+        "from": {"data": "source_0"},
+        "encode": {
+          "update": {
+            "opacity": [
+              {
+                "test": "!length(data(\"room_type_highlight_store\")) || vlSelectionTest(\"room_type_highlight_store\", datum)",
+                "value": 0.9
+              },
+              {"value": 0.006}
+            ],
+            "fill": {"value": "transparent"},
+            "stroke": {"scale": "color", "field": "room_type"},
+            "tooltip": {
+              "signal": "{\"Room Type\": isValid(datum[\"room_type\"]) ? datum[\"room_type\"] : \"\"+datum[\"room_type\"], \"Price (AUD)\": format(datum[\"price\"], \"\"), \"Reviews Score Ratings\": format(datum[\"review_scores_rating\"], \"\")}"
+            },
+            "ariaRoleDescription": {"value": "point"},
+            "description": {
+              "signal": "\"review_scores_rating: \" + (format(datum[\"review_scores_rating\"], \"\")) + \"; price: \" + (format(datum[\"price\"], \"\")) + \"; Room Type: \" + (isValid(datum[\"room_type\"]) ? datum[\"room_type\"] : \"\"+datum[\"room_type\"]) + \"; Price (AUD): \" + (format(datum[\"price\"], \"\")) + \"; Reviews Score Ratings: \" + (format(datum[\"review_scores_rating\"], \"\"))"
+            },
+            "x": [
+              {
+                "test": "!isValid(datum[\"review_scores_rating\"]) || !isFinite(+datum[\"review_scores_rating\"])",
+                "value": 0
+              },
+              {"scale": "x", "field": "review_scores_rating"}
+            ],
+            "y": [
+              {
+                "test": "!isValid(datum[\"price\"]) || !isFinite(+datum[\"price\"])",
+                "field": {"group": "height"}
+              },
+              {"scale": "y", "field": "price"}
+            ]
+          }
+        }
+      }
+    ],
+    "scales": [
+      {
+        "name": "x",
+        "type": "linear",
+        "domain": {"data": "source_0", "field": "review_scores_rating"},
+        "range": [0, {"signal": "width"}],
+        "zero": false,
+        "nice": true
+      },
+      {
+        "name": "y",
+        "type": "linear",
+        "domain": {"data": "source_0", "field": "price"},
+        "range": [{"signal": "height"}, 0],
+        "zero": false,
+        "nice": true
+      },
+      {
+        "name": "color",
+        "type": "ordinal",
+        "domain": ["Entire home/apt", "Private room", "Shared room"],
+        "range": ["#2b83ba", "#d7191c", "#91cf60"]
+      }
+    ],
+    "axes": [
+      {
+        "scale": "x",
+        "orient": "bottom",
+        "gridScale": "y",
+        "grid": true,
+        "tickCount": {"signal": "ceil(width/40)"},
+        "domain": false,
+        "labels": false,
+        "aria": false,
+        "maxExtent": 0,
+        "minExtent": 0,
+        "ticks": false,
+        "zindex": 0
+      },
+      {
+        "scale": "y",
+        "orient": "left",
+        "gridScale": "x",
+        "grid": true,
+        "tickCount": {"signal": "ceil(height/40)"},
+        "domain": false,
+        "labels": false,
+        "aria": false,
+        "maxExtent": 0,
+        "minExtent": 0,
+        "ticks": false,
+        "zindex": 0
+      },
+      {
+        "scale": "x",
+        "orient": "bottom",
+        "grid": false,
+        "title": "review_scores_rating",
+        "labelFlush": true,
+        "labelOverlap": true,
+        "tickCount": {"signal": "ceil(width/40)"},
+        "zindex": 0
+      },
+      {
+        "scale": "y",
+        "orient": "left",
+        "grid": false,
+        "title": "price",
+        "labelOverlap": true,
+        "tickCount": {"signal": "ceil(height/40)"},
+        "zindex": 0
+      }
+    ],
+    "legends": [
+      {
+        "title": "Room Type",
+        "stroke": "color",
+        "symbolType": "circle",
+        "encode": {
+          "labels": {
+            "name": "room_type_legend_labels",
+            "interactive": true,
+            "update": {
+              "opacity": [
+                {
+                  "test": "(!length(data(\"room_type_highlight_store\")) || (room_type_highlight[\"room_type\"] && indexof(room_type_highlight[\"room_type\"], datum.value) >= 0))",
+                  "value": 1
+                },
+                {"value": 0.35}
+              ]
+            }
+          },
+          "symbols": {
+            "name": "room_type_legend_symbols",
+            "interactive": true,
+            "update": {
+              "fill": {"value": "transparent"},
+              "opacity": [
+                {
+                  "test": "(!length(data(\"room_type_highlight_store\")) || (room_type_highlight[\"room_type\"] && indexof(room_type_highlight[\"room_type\"], datum.value) >= 0))",
+                  "value": 0.9
+                },
+                {"value": 0.35}
+              ]
+            }
+          },
+          "entries": {
+            "name": "room_type_legend_entries",
+            "interactive": true,
+            "update": {"fill": {"value": "transparent"}}
+          }
+        }
+      }
+    ],
+    "config": {}
+  }
+  
