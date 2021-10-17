@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Airbnb Rentals in Melbourne</title>
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+  <!-- Import pure.css -->
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <!-- CSS file -->
+  <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+
+
+</head>
+<body>
+
+ <div class="page" style="background-color:rgb(248, 253, 255)">
+
+
+    <div class="pure-g">
+      <div class="pure-u-1-1">
+        <h1 style = "text-align:center; background-color :rgb(203, 234, 255); padding: 15px;">Airbnb Rentals in Melbourne</h1>
+        <p style="text-align: justify;">Airbnb, Inc. is an American company that operates an online marketplace for lodging, primarily homestays for vacation rentals, and tourism activities. Based in San Francisco, California, the platform is accessible via website and mobile app. Airbnb does not own any of the listed properties; instead, it profits by receiving commission from each booking.(Airbnb,n.d.)</p>
+        <p>In this visualisation, it provides Airbnb's listings' information in Melbourne, VIC Australia. It shows the number of reviews on months of every year, prices, type of rooms, location, etc. </p>
+      </div>
+    </div>
+    <hr class="kekw">
+
+
+    <!-- pure grid group -->
+    <div class="pure-g">
+        <div class="pure-u-2-5">
+          <div class="description description-left">
+            <h2 style="text-align: center; background-color :rgb(203, 234, 255); padding: 15px;">Airbnb Area of Listings</h2>
+            <p style="text-align: justify;">By looking at the map, we could see areas where it contains the number of Airbnb listings. </p>
+            <p style="text-align: justify;">Ranging mostly 20-60 number of listings, we could see that the number of listings on Suburbs increases as it's closer to Melbourne City. Melbourne City iself, has 3439 number of Airbnb Listings.</p>
+          </div>
+        </div>
+        <div class="pure-u-3-5">
+          <div id="vis1" class="vis-container"></div>
+        </div>
+    </div>
+    <hr class="kekw">
+    <!-- end pure grid group -->
+
+    <!-- pure grid group -->
+    <div class="pure-g">
+        <div class="pure-u-3-5">
+          <div id="vis2"  class="vis-container"></div>
+        </div>
+        <div class="pure-u-2-5">
+          <div class="description description-right">
+            <h2 style="background-color :rgb(203, 234, 255); padding: 15px;text-align: center;">Price of Top Airbnb Listings' on Suburbs</h2>
+            <p style="text-align: justify;">Looking at the Top 10 based on number of listings, Docklands (#5) has the highest average price of rent per bedroom, which is $112. </p>
+            <p style="text-align: justify;">However, based on Top 30 number of listings, Docklands became the third highest average price of rent per bedroom, where Healesville (#23) became the first, where it has an average price of $116 per bedroom.  </p>
+          </div>
+        </div>
+      
+    </div>
+    <!-- end pure grid group -->
+<hr class="kekw">
+    <div class="pure-g" >
+      <div class="pure-u-2-5">
+        <div class="description description-left">
+          <h2 style="background-color :rgb(203, 234, 255); padding: 15px;text-align: center;">Review Scores based on Price and Room Type</h2>
+          <p style="text-align: justify;">Based on the Scatter plot, we could assume that the Review Scores of listings in Airbnb is not affected by their price. All of the room type's prices are mostly at $50-$500 range, where mostly has scores higher than 70-80.</p>
+          <p style="text-align: justify;">Listings that have prices higher than $500, also have, mostly, review scores higher than 75.</p>
+        </div>
+      </div>
+      <div class="pure-u-3-5" >
+        <div id="vis5"  class="vis-container"></div>
+      </div>
+    
+    </div>
+<hr class="kekw">
+    <!-- pure grid group -->
+    <div class="pure-g" style="padding: 5px;">
+      <div class="pure-u-3-5">
+        <div id="vis3"  class="vis-container"></div>
+      </div>
+      <div class="pure-u-2-5">
+        <div class="description description-right">
+          <h2 style="background-color :rgb(203, 234, 255); padding: 15px;text-align: center;">Most Popular Month of Airbnb Rents</h2>
+          <p style="text-align: justify;">Based on the visualisations, we could see that December has the highest number of reviews overall. It could be affected by celebrations such as Christmas that is held on the month. </p>
+          <p style="text-align: justify;">Other than that, March is also a popular time to travel because it is still considered peak season. However, accommodation availability and prices are usually not as tight as during the peak months of the summer.</p>
+        </div>
+      </div>
+      
+      <div class="pure-u-1-1">
+        <div id="vis4"  class="vis-container"></div>
+      </div>
+      
+    </div>
+
+<hr class="kekw">
+
+    <!-- end pure grid group -->
+  
+    <div class="pure-g">
+      <div class="pure-u-1-1 small-font">
+        <p>This visualisation is created by <a href="https://github.com/ChiptenIsCool" target="_blank">Cipta Pratama</a></href>. The datasource is taken from <a href="https://www.kaggle.com/tylerx/melbourne-airbnb-open-data?select=reviews_dec18.csv" target="_blank">Kaggle</href>.</p>
+      </div>
+    </div>
+  </div> <!-- end page -->
+   
+<script type="text/javascript">
+  var specVis2 = "COMPILED_VEGA_BAR_CODE.vg.json";
+  var specVis5= "./original_code_DO_NOT_CHANGE/vega_editor_assignment_scatter_ORIGINAL.vg.json";
+  var specVis3="COMPILED_VEGA_LINE_CODE.vg.json";
+  var specVis1 = "COMPILED_VEGA_MAP_CODE.vg.json";
+  var specVis4 = "./original_code_DO_NOT_CHANGE/vega_editor_line_TOTAL_code_ORIGINAL.vg.json";
+
+  vegaEmbed('#vis1', specVis1, {"actions": false});
+  
+   vegaEmbed('#vis2', specVis2, {"actions": false}).then(function(result) {
+    // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+  }).catch(console.error);
+
+  vegaEmbed('#vis3', specVis3, {"actions": false}).then(function(result) {
+    // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+  }).catch(console.error);
+
+  vegaEmbed('#vis4', specVis4, {"actions": false}).then(function(result) {
+    // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+  }).catch(console.error);
+  vegaEmbed('#vis5', specVis5, {"actions": false}).then(function(result) {
+    // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+  }).catch(console.error);
+</script>
+</body>
+</html>
